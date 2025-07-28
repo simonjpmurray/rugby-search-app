@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Rugby Player Facts</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      max-width: 700px;
+      margin: auto;
+      background: #e6f2ff;
+      text-align: center;
+    }
+    input {
+      padding: 10px;
+      width: 60%;
+      font-size: 16px;
+    }
+    button {
+      padding: 10px 16px;
+      font-size: 16px;
+      margin-left: 10px;
+      cursor: pointer;
+      background-color: #0077cc;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+    .rugby-ball {
+      width: 90%;
+      max-width: 600px;
+      margin: 30px auto;
+      padding: 30px;
+      background: #f5f5f5;
+      border: 4px solid #4b2e83;
+      border-radius: 50% / 25%;
+      box-shadow: 0 0 20px rgba(0,0,0,0.2);
+      font-size: 18px;
+      line-height: 1.6;
+      text-align: center;
+    }
+    a {
+      color: #0077cc;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <h1>Rugby Player Knowledge Base</h1>
+  <p>Type a player's name to fetch facts from Wikipedia:</p>
+  <input type="text" id="playerInput" placeholder="e.g. Richie McCaw">
+  <button onclick="searchPlayer()">Search</button>
+  <div class="rugby-ball">
+    <div class="result" id="result"></div>
+  </div>
+
+  <script>
+    async function searchPlayer() {
+      const name = document.getElementById("playerInput").value.trim();
+      const resultDiv = document.get
