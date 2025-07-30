@@ -24,8 +24,8 @@
         resultDiv.innerHTML = "No results found for that name.";
       }
     } catch (error) {
-      resultDiv.innerHTML = "An error occurred while fetching data.";
-      console.error(error);
-    }
+  resultDiv.innerHTML = "Oops! Something went wrong. Try a different name?";
+  console.error("Fetch error:", error);
+}
   }
 </script>
