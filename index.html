@@ -46,3 +46,48 @@
     }
     a:hover {
       text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <h1>Rugby Player Knowledge Base</h1>
+  <p>Type a player's name to fetch facts from Wikipedia:</p>
+  <input type="text" id="playerInput" placeholder="e.g. Richie McCaw">
+  <button onclick="searchPlayer()">Search</button>
+  <div class="rugby-ball">
+    <div class="result" id="result"></div>
+  </div>
+
+  <script>
+    async function searchPlayer() {
+      const name = document.getElementById("playerInput").value.trim();
+      const resultDiv = document.getElementById("result");
+
+      if (name === "") {
+        resultDiv.innerHTML = "Please enter a player's name.";
+        return;
+      }
+
+      const apiUrl = `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(name)}?origin=*`;
+
+      try {
+        const response = await fetch(apiUrl);
+        const data = await response.json();
+
+        if (data.extract) {
+          resultDiv.innerHTML = `
+            <h2>${data.title}</h2>
+            <p>${data.extract}</p>
+            <a href="${data.content_urls.desktop.page}" target="_blank">Read more on Wikipedia</a>
+          `;
+        } else {
+          resultDiv.innerHTML = "No results found for that name.";
+        }
+      } catch (error) {
+        resultDiv.innerHTML = "Oops! Something went wrong. Try a different name?";
+        console.error("Fetch error:", error);
+      }
+    }
+  </script>
+</body>
+</html>
