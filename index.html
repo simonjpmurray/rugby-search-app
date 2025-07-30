@@ -27,8 +27,6 @@
       border: none;
       border-radius: 5px;
     }
-
-
     .result {
       margin-top: 30px;
       font-size: 18px;
@@ -41,29 +39,41 @@
     a:hover {
       text-decoration: underline;
     }
+    @keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
   </style>
 </head>
 <body>
-  <h1>Rugby Player Knowledge Base - Test 1</h1>
+  <h1>Rugby Player Knowledge Base - Test 2</h1>
   <p>Type a player's name to fetch facts from Wikipedia:</p>
   <input type="text" id="playerInput" placeholder="e.g. Richie McCaw">
   <button onclick="searchPlayer()">Search</button>
+  <div id="spinner" style="display:none;">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fb/Rugby_ball_icon.png/240px-Rugby_ball_icon.png" 
+       alt="Loading rugby ball..." 
+       style="width:60px; animation: spin 1s linear infinite;">
+</div>
+
   <p id="loading" style="display:none;">Loading facts... 🏉</p>
   <div class="result" id="result"></div>
 
-  <script>
+<script>
   async function searchPlayer() {
     const name = document.getElementById("playerInput").value.trim();
     const resultDiv = document.getElementById("result");
-    const loading = document.getElementById("loading");
+    const spinner = document.getElementById("spinner");
 
     if (name === "") {
       resultDiv.innerHTML = "Please enter a player's name.";
       return;
     }
 
-    // Show loading message
-    loading.style.display = "block";
+    // Show spinner and clear previous result
+    spinner.style.display = "block";
+    resultDiv.innerHTML = "";
 
     const apiUrl = `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(name)}?origin=*`;
 
@@ -71,25 +81,25 @@
       const response = await fetch(apiUrl);
       const data = await response.json();
 
-      // Hide loading message
-      loading.style.display = "none";
-
-      if (data.extract) {
-        resultDiv.innerHTML = `
-          <h2>${data.title}</h2>
-          <p>${data.extract}</p>
-          <a href="${data.content_urls.desktop.page}" target="_blank">Read more on Wikipedia</a>
-        `;
-      } else {
-        resultDiv.innerHTML = "No results found for that name.";
-      }
+      // Force 3-second delay even if data arrives early
+      setTimeout(() => {
+        spinner.style.display = "none";
+        if (data.extract) {
+          resultDiv.innerHTML = `
+            <h2>${data.title}</h2>
+            <p>${data.extract}</p>
+            <a href="${data.content_urls.desktop.page}" target="_blank">Read more on Wikipedia</a>
+          `;
+        } else {
+          resultDiv.innerHTML = "No results found for that name.";
+        }
+      }, 3000); // 3 seconds
     } catch (error) {
-      loading.style.display = "none";
-      resultDiv.innerHTML = "Oops! Something went wrong. Try a different name?";
-      console.error("Fetch error:", error);
+      setTimeout(() => {
+        spinner.style.display = "none";
+        resultDiv.innerHTML = "Oops! Something went wrong. Try a different name?";
+        console.error("Fetch error:", error);
+      }, 3000);
     }
   }
 </script>
-
-</body>
-</html>
